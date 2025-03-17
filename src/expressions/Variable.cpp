@@ -31,4 +31,5 @@ std::shared_ptr<BaseExpr<T>> Variable<T>::diff(const std::string& by) const {
     return std::make_shared<Constant<T>>(by == name ? 1 : 0);
 }
 
-template class Variable<long double>;
+template class Variable<RealNumber>;
+template class Variable<ComplexNumber>;

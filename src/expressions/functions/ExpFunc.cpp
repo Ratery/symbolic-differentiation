@@ -15,4 +15,5 @@ std::shared_ptr<BaseExpr<T>> ExpFunc<T>::diff(const std::string& by) const {
     );
 }
 
-template class ExpFunc<long double>;
+template class ExpFunc<RealNumber>;
+template class ExpFunc<ComplexNumber>;

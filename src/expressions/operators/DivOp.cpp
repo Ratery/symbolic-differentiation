@@ -25,4 +25,5 @@ std::shared_ptr<BaseExpr<T>> DivOp<T>::diff(const std::string& by) const {
     );
 }
 
-template class DivOp<long double>;
+template class DivOp<RealNumber>;
+template class DivOp<ComplexNumber>;

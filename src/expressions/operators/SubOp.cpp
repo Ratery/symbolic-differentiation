@@ -13,4 +13,5 @@ std::shared_ptr<BaseExpr<T>> SubOp<T>::diff(const std::string& by) const {
     );
 }
 
-template class SubOp<long double>;
+template class SubOp<RealNumber>;
+template class SubOp<ComplexNumber>;

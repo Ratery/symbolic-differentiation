@@ -18,4 +18,5 @@ std::shared_ptr<BaseExpr<T>> LnFunc<T>::diff(const std::string& by) const {
     );
 }
 
-template class LnFunc<long double>;
+template class LnFunc<RealNumber>;
+template class LnFunc<ComplexNumber>;

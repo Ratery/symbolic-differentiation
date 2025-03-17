@@ -39,12 +39,17 @@ std::string FuncImpl<T, Derived>::to_string() const {
     return std::format("{}({})", this->name(), this->argument->to_string());
 }
 
-template class Func<long double>;
+template class Func<RealNumber>;
+template class Func<ComplexNumber>;
 
-template class FuncImpl<long double, SinFunc<long double>>;
+template class FuncImpl<RealNumber, SinFunc<RealNumber>>;
+template class FuncImpl<ComplexNumber, SinFunc<ComplexNumber>>;
 
-template class FuncImpl<long double, CosFunc<long double>>;
+template class FuncImpl<RealNumber, CosFunc<RealNumber>>;
+template class FuncImpl<ComplexNumber, CosFunc<ComplexNumber>>;
 
-template class FuncImpl<long double, LnFunc<long double>>;
+template class FuncImpl<RealNumber, LnFunc<RealNumber>>;
+template class FuncImpl<ComplexNumber, LnFunc<ComplexNumber>>;
 
-template class FuncImpl<long double, ExpFunc<long double>>;
+template class FuncImpl<RealNumber, ExpFunc<RealNumber>>;
+template class FuncImpl<ComplexNumber, ExpFunc<ComplexNumber>>;

@@ -1,9 +1,13 @@
 #ifndef EXPRESSIONS_HPP
 #define EXPRESSIONS_HPP
 
+#include <complex>
 #include <memory>
 #include <string>
 #include <unordered_map>
+
+using RealNumber = long double;
+using ComplexNumber = std::complex<long double>;
 
 enum class OpPrecedence {
     AddSub = 0,
@@ -30,7 +34,7 @@ protected:
     virtual ~BaseExpr() = default;
 };
 
-template<typename T>
+template<typename T = RealNumber>
 class Expression {
 public:
     explicit Expression(T number);

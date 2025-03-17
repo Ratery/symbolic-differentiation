@@ -18,4 +18,5 @@ std::shared_ptr<BaseExpr<T>> CosFunc<T>::diff(const std::string& by) const {
     );
 }
 
-template class CosFunc<long double>;
+template class CosFunc<RealNumber>;
+template class CosFunc<ComplexNumber>;

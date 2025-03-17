@@ -28,4 +28,5 @@ std::shared_ptr<BaseExpr<T>> PowOp<T>::diff(const std::string& by) const {
     );
 }
 
-template class PowOp<long double>;
+template class PowOp<RealNumber>;
+template class PowOp<ComplexNumber>;

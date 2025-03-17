@@ -4,14 +4,14 @@
 #include "Lexer.hpp"
 #include "../expressions/expressions.hpp"
 
-template<typename T>
+template<typename T = RealNumber>
 class Parser {
 public:
     explicit Parser(const std::string& expression_str, bool case_sensitive = false);
     Expression<T> parse();
 
 private:
-    Lexer lexer;
+    Lexer<T> lexer;
     Token cur_token;
 
     Token advance();

@@ -8,18 +8,29 @@
 #include <unordered_map>
 
 enum TokenType {
-    RealNumber,
+    RNumber,
     ImaginaryUnit,
     Identifier,
-    BinaryOperator,
-    OpeningParenthesis,
-    ClosingParenthesis,
+    BinOperator,
+    OpeningParen,
+    ClosingParen,
     Function,
     EOL
 };
 
+const std::string TokenTypeNames[] = {  // FIXME: for test only
+    "RNumber",
+    "ImaginaryUnit",
+    "Variable",
+    "BinaryOperator",
+    "OpeningParenthesis",
+    "ClosingParenthesis",
+    "Function",
+    "End"
+};
+
 const std::unordered_map<TokenType, std::regex> REGEX_PATTERN_MAP = {
-    {RealNumber, std::regex("(0|[1-9][0-9]*)(\\.[0-9]+)?")},
+    {RNumber, std::regex("(0|[1-9][0-9]*)(\\.[0-9]+)?")},
     {Identifier, std::regex("[a-zA-Z_]+")},
     {Function, std::regex("(sin|cos|ln|exp)\\(", std::regex_constants::icase)}
 };
@@ -29,6 +40,7 @@ struct Token {
     std::string value;
 };
 
+template<typename T>
 class Lexer {
 public:
     explicit Lexer(const std::string& input, bool case_sensitive = false);

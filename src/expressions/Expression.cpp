@@ -6,9 +6,21 @@ template<typename T>
 Expression<T>::Expression(std::shared_ptr<BaseExpr<T>> expression_impl)
     : inner(std::move(expression_impl)) {}
 
-template<typename T>
-Expression<T>::Expression(T number)
-    : inner(std::make_shared<Constant<T>>(number)) {}
+template<>
+Expression<RealNumber>::Expression(RealNumber number)
+    : inner(std::make_shared<Constant<RealNumber>>(number)) {}
+
+template<>
+Expression<ComplexNumber>::Expression(ComplexNumber number) {
+    if (number.real() == 0 || number.imag() == 0) {
+        inner = std::make_shared<Constant<ComplexNumber>>(number);
+    } else {
+        inner = std::make_shared<AddOp<ComplexNumber>>(
+            std::make_shared<Constant<ComplexNumber>>(ComplexNumber(number.real(), 0)),
+            std::make_shared<Constant<ComplexNumber>>(ComplexNumber(0, number.imag()))
+        );
+    }
+}
 
 template<typename T>
 Expression<T>::Expression(const std::string& var_name)
@@ -122,4 +134,5 @@ std::string Expression<T>::to_string() const {
     return inner->to_string();
 }
 
-template class Expression<long double>;
+template class Expression<RealNumber>;
+template class Expression<ComplexNumber>;

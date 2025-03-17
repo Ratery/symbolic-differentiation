@@ -15,4 +15,5 @@ std::shared_ptr<BaseExpr<T>> SinFunc<T>::diff(const std::string& by) const {
     );
 }
 
-template class SinFunc<long double>;
+template class SinFunc<RealNumber>;
+template class SinFunc<ComplexNumber>;

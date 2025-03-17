@@ -19,15 +19,31 @@ Token Parser<T>::advance() {
 }
 
 template<>
-std::shared_ptr<BaseExpr<long double>> Parser<long double>::parse_real_number() {
-    auto res = std::make_shared<Constant<long double>>(std::stold(cur_token.value));
+std::shared_ptr<BaseExpr<RealNumber>> Parser<RealNumber>::parse_real_number() {
+    auto res = std::make_shared<Constant<RealNumber>>(std::stold(cur_token.value));
     advance();
     return res;
 }
 
-template<typename T>
-std::shared_ptr<BaseExpr<T>> Parser<T>::parse_imaginary_unit() {
-    throw std::runtime_error("Not implemented");
+template<>
+std::shared_ptr<BaseExpr<ComplexNumber>> Parser<ComplexNumber>::parse_real_number() {
+    auto real_part = ComplexNumber(std::stold(cur_token.value), 0);
+    auto res = std::make_shared<Constant<ComplexNumber>>(real_part);
+    advance();
+    return res;
+}
+
+template<>
+std::shared_ptr<BaseExpr<RealNumber>> Parser<RealNumber>::parse_imaginary_unit() {
+    throw std::runtime_error("Can not parse imaginary unit in Parser<RealNumber>");
+}
+
+template<>
+std::shared_ptr<BaseExpr<ComplexNumber>> Parser<ComplexNumber>::parse_imaginary_unit() {
+    constexpr auto imaginary_unit = ComplexNumber(0, 1);
+    auto res = std::make_shared<Constant<ComplexNumber>>(imaginary_unit);
+    advance();
+    return res;
 }
 
 template<typename T>
@@ -41,9 +57,9 @@ std::shared_ptr<BaseExpr<T>> Parser<T>::parse_identifier() {
 ///   ::= '(' expression ')'
 template<typename T>
 std::shared_ptr<BaseExpr<T>> Parser<T>::parse_parentheses_expr() {
-    consume(OpeningParenthesis);
+    consume(OpeningParen);
     auto expr = parse_expression();
-    consume(ClosingParenthesis);
+    consume(ClosingParen);
     return expr;
 }
 
@@ -54,7 +70,7 @@ std::shared_ptr<BaseExpr<T>> Parser<T>::parse_function() {
     const std::string func_name = cur_token.value.substr(0, cur_token.value.length() - 1);
     consume(Function);
     auto expr = parse_expression();
-    consume(ClosingParenthesis);
+    consume(ClosingParen);
     return Func<T>::from_name(func_name, expr);
 }
 
@@ -67,11 +83,11 @@ std::shared_ptr<BaseExpr<T>> Parser<T>::parse_function() {
 template<typename T>
 std::shared_ptr<BaseExpr<T>> Parser<T>::parse_primary() {
     switch (cur_token.type) {
-    case OpeningParenthesis:
+    case OpeningParen:
         return parse_parentheses_expr();
     case Function:
         return parse_function();
-    case RealNumber:
+    case RNumber:
         return parse_real_number();
     case ImaginaryUnit:
         return parse_imaginary_unit();
@@ -88,8 +104,8 @@ template<typename T>
 std::shared_ptr<BaseExpr<T>> Parser<T>::parse_bin_op_rhs(
     const OpPrecedence expr_precedence, std::shared_ptr<BaseExpr<T>> lhs
 ) {
-    while (cur_token.type != EOL && cur_token.type != ClosingParenthesis) {
-        if (cur_token.type != BinaryOperator) {
+    while (cur_token.type != EOL && cur_token.type != ClosingParen) {
+        if (cur_token.type != BinOperator) {
             throw std::runtime_error(std::format("Expected binary operator, got: \"{}\"", cur_token.value));
         }
         const std::string bin_op = cur_token.value;
@@ -99,7 +115,7 @@ std::shared_ptr<BaseExpr<T>> Parser<T>::parse_bin_op_rhs(
         }
         advance();
         auto rhs = parse_primary();
-        if (cur_token.type == BinaryOperator) {
+        if (cur_token.type == BinOperator) {
             const std::string next_bin_op = cur_token.value;
             const auto next_bin_op_precedence = BinOp<T>::get_precedence_by_name(next_bin_op);
             if (bin_op_precedence < next_bin_op_precedence) {
@@ -131,4 +147,5 @@ Expression<T> Parser<T>::parse() {
     return Expression<T>(parse_expression());
 }
 
-template class Parser<long double>;
+template class Parser<RealNumber>;
+template class Parser<ComplexNumber>;

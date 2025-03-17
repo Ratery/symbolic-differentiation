@@ -83,14 +83,20 @@ std::string BinOpImpl<T, Derived>::to_string() const {
     return std::format("{} {} {}", lhs_str, this->name(), rhs_str);
 }
 
-template class BinOp<long double>;
+template class BinOp<RealNumber>;
+template class BinOp<ComplexNumber>;
 
-template class BinOpImpl<long double, AddOp<long double>>;
+template class BinOpImpl<RealNumber, AddOp<RealNumber>>;
+template class BinOpImpl<ComplexNumber, AddOp<ComplexNumber>>;
 
-template class BinOpImpl<long double, SubOp<long double>>;
+template class BinOpImpl<RealNumber, SubOp<RealNumber>>;
+template class BinOpImpl<ComplexNumber, SubOp<ComplexNumber>>;
 
-template class BinOpImpl<long double, MulOp<long double>>;
+template class BinOpImpl<RealNumber, MulOp<RealNumber>>;
+template class BinOpImpl<ComplexNumber, MulOp<ComplexNumber>>;
 
-template class BinOpImpl<long double, DivOp<long double>>;
+template class BinOpImpl<RealNumber, DivOp<RealNumber>>;
+template class BinOpImpl<ComplexNumber, DivOp<ComplexNumber>>;
 
-template class BinOpImpl<long double, PowOp<long double>>;
+template class BinOpImpl<RealNumber, PowOp<RealNumber>>;
+template class BinOpImpl<ComplexNumber, PowOp<ComplexNumber>>;

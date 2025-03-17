@@ -19,4 +19,5 @@ std::shared_ptr<BaseExpr<T>> MulOp<T>::diff(const std::string& by) const {
     );
 }
 
-template class MulOp<long double>;
+template class MulOp<RealNumber>;
+template class MulOp<ComplexNumber>;

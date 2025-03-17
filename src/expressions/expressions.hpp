@@ -12,6 +12,8 @@ enum class OpPrecedence {
     Pow = 3
 };
 
+template <typename T> class Parser;
+
 template<typename T>
 class BaseExpr {
 public:
@@ -69,6 +71,8 @@ private:
     std::shared_ptr<BaseExpr<T>> inner;
 
     explicit Expression(std::shared_ptr<BaseExpr<T>> expression_impl);
+
+    friend class Parser<T>;
 };
 
 template<typename T>
@@ -113,8 +117,15 @@ public:
        const std::shared_ptr<BaseExpr<T>>& _rhs
     );
 
-    virtual std::string name() const = 0;
+    static std::shared_ptr<BinOp> from_name(
+        const std::string& name,
+        const std::shared_ptr<BaseExpr<T>>& _lhs,
+        const std::shared_ptr<BaseExpr<T>>& _rhs
+    );
+    static OpPrecedence get_precedence_by_name(const std::string& name);
+
     virtual OpPrecedence precedence() const = 0;
+    virtual std::string name() const = 0;
 
 protected:
     std::shared_ptr<BaseExpr<T>> lhs;
@@ -130,6 +141,7 @@ public:
         const std::unordered_map<std::string, T>& values
     ) const override;
 
+    OpPrecedence precedence() const override;
     std::string to_string() const override;
 };
 
@@ -137,6 +149,11 @@ template<typename T>
 class Func : public BaseExpr<T> {
 public:
     explicit Func(const std::shared_ptr<BaseExpr<T>>& _argument);
+
+    static std::shared_ptr<Func> from_name(
+        const std::string& name,
+        const std::shared_ptr<BaseExpr<T>>& _argument
+    );
 
     virtual std::string name() const = 0;
 
@@ -168,10 +185,6 @@ private:
     std::string name() const override {
         return "+";
     }
-
-    OpPrecedence precedence() const override {
-        return OpPrecedence::AddSub;
-    }
 };
 
 template<typename T>
@@ -185,10 +198,6 @@ public:
 private:
     std::string name() const override {
         return "-";
-    }
-
-    OpPrecedence precedence() const override {
-        return OpPrecedence::AddSub;
     }
 };
 
@@ -204,10 +213,6 @@ private:
     std::string name() const override {
         return "*";
     }
-
-    OpPrecedence precedence() const override {
-        return OpPrecedence::Mul;
-    }
 };
 
 template<typename T>
@@ -222,10 +227,6 @@ private:
     std::string name() const override {
         return "/";
     }
-
-    OpPrecedence precedence() const override {
-        return OpPrecedence::Div;
-    }
 };
 
 template<typename T>
@@ -239,10 +240,6 @@ public:
 private:
     std::string name() const override {
         return "^";
-    }
-
-    OpPrecedence precedence() const override {
-        return OpPrecedence::Pow;
     }
 };
 

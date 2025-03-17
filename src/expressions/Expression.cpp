@@ -1,4 +1,5 @@
 #include "expressions.hpp"
+#include "../parser/Parser.hpp"
 
 #include <utility>
 
@@ -20,6 +21,11 @@ Expression<ComplexNumber>::Expression(ComplexNumber number) {
             std::make_shared<Constant<ComplexNumber>>(ComplexNumber(0, number.imag()))
         );
     }
+}
+
+template<typename T>
+Expression<T> Expression<T>::from_string(const std::string& expression_str, bool case_sensitive) {
+    return Parser<T>(expression_str, case_sensitive).parse();
 }
 
 template<typename T>

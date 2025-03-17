@@ -40,6 +40,8 @@ public:
     explicit Expression(T number);
     explicit Expression(const std::string& var_name);
 
+    static Expression from_string(const std::string& expression_str, bool case_sensitive = false);
+
     Expression sin() const;
     Expression cos() const;
     Expression ln() const;
